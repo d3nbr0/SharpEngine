@@ -1,3 +1,5 @@
+import json
+
 class New:
     def __init__(self):
         self.reset()
@@ -18,7 +20,24 @@ class New:
         self.__attachments.append(attachment)
 
     def vk_object(self):
-        return {'message': '<br>'.join(self.__msg), 'attachments': ','.join(self.__attachments)}
+        return {
+            'message': '<br>'.join(self.__msg),
+            'attachments': ','.join(self.__attachments),
+            'keyboard': json.dumps(self.__buttons, ensure_ascii=False).encode('utf8')
+        }
+
+    def add_buttons_line(self, line):
+        if len(line) > 4:
+            line = line[:4]
+        self.__buttons['buttons'].append([])
+        for item in line:
+            self.__buttons['buttons'][-1].append({
+                'action': {
+                    'type': 'text',
+                    'label': item
+                },
+                'color': 'default'
+            })
 
     def enable_nickname(self):
         self.__nickname = True
@@ -30,3 +49,7 @@ class New:
         self.__msg = []
         self.__attachments = []
         self.__nickname = False
+        self.__buttons = {
+            'one_time': False,
+            'buttons': []
+        }
