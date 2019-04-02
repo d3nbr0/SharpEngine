@@ -12,7 +12,9 @@ last_load = ["user"]
 
 
 def load_modules():
-    global config, VK, __modules, user_inh
+    global config, VK, __modules
+    __modules = None
+    plugins.plugins = []
     this_modules = []
     for root, dirs, files in os.walk('bot\\modules'):
         if root not in blocked_dirs:

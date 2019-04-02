@@ -10,6 +10,7 @@ commands = []
 
 def load_commands():
     global commands
+    commands = []
     for root, dirs, files in os.walk('bot\\commands'):
         check_cmds = filter(lambda x: x.endswith('.py'), files)
         for item in check_cmds:

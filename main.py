@@ -2,12 +2,12 @@ from engine.vk.vk import VK
 from engine.other.config import Config
 from engine.other import console
 from engine.other import hooks
-from bot import bot
+import bot.bot as bot
 import engine.cmds.cmd as cmd
 
 if __name__ == '__main__':
 
-    PLATFORM_VERSION = "1.0.1 BETA"
+    PLATFORM_VERSION = "1.0.3 BETA"
 
     config = None
     vk = None
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         bot.init(vk, config)
         vk.handle_longpoll(handle_update)
         console.log("Платформа успешно загружена!")
-        cmd.listen()
+        cmd.listen(vk, config)
 
 
     def handle_update(update):

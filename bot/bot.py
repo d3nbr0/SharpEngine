@@ -4,6 +4,8 @@ from bot import command
 import bot.module
 import random
 
+handle = True
+
 
 def init(this_vk, this_config):
     bot.module.VK = this_vk
@@ -16,6 +18,8 @@ def init(this_vk, this_config):
 
 
 def message_new(msg):
+    if not handle:
+        return
     rmsg = bot.module.message.New()
     if command.exec_command(msg, rmsg):
         params = rmsg.vk_object()
