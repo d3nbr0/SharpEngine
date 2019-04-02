@@ -1,5 +1,6 @@
 import configparser
 import os
+import sys
 from engine.other import console
 
 
@@ -16,13 +17,15 @@ class Config:
         self.config.add_section("bot")
         self.config.set("bot", "access_token", "YOUR_TOKEN")
         self.config.set("bot", "group_id", "YOUR_ID")
-        self.config.set("bot", "workers_count", "4")
         self.config.set("bot", "mysql_host", "HOST")
         self.config.set("bot", "mysql_user", "USER")
         self.config.set("bot", "mysql_pass", "PASSWORD")
         self.config.set("bot", "mysql_base", "DATABASE")
         self.config.add_section('binds')
         self.save_config()
+        console.process("Был создан новый конфигурационный файл. Пожалуйста,\
+ настройте его перед началом использования бота")
+        sys.exit(0)
 
     def save_config(self):
         with open(self.name, "w") as file:
