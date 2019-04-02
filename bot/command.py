@@ -2,6 +2,8 @@ from engine.other import console
 import importlib.util
 import os
 import time
+import sys
+import traceback
 import bot.module
 
 
@@ -34,10 +36,11 @@ def exec_command(message, rmsg):
                 item.cmd['processing']({'msg': message, 'args': args, 'other': {'retime': time.time()}}, user, rmsg)
             except bot.module.CommandException as cmd:
                 rmsg.add_line(cmd.message)
-            except Exception as err:
+            except Exception:
+                ex_type, ex, tb = sys.exc_info()
                 rmsg.reset()
                 rmsg.add_line('❌ Возникла системная ошибка при обработке команды')
-                console.error("Ошибка при выполнении команды \"{}\": {}".format(message['text'], str(err)))
+                console.error("Ошибка при выполнении команды \"{}\": ({}) {}\n{}".format(message['text'], ex_type, ex, traceback.format_tb(tb)))
             if rmsg.nickname():
                 rmsg.add_start_line("{}, ".format(user.nickname))
             user.save()
