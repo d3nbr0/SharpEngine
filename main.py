@@ -7,7 +7,7 @@ import engine.cmds.cmd as cmd
 
 if __name__ == '__main__':
 
-    PLATFORM_VERSION = "1.0.3 BETA"
+    PLATFORM_VERSION = "1.0.5 BETA"
 
     config = None
     vk = None
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         console.log("Подключение к боту...")
         assert hasattr(bot, 'init')
         bot.init(vk, config)
-        vk.handle_longpoll(handle_update)
+        vk.listen_longpoll(handle_update)
         console.log("Платформа успешно загружена!")
         cmd.listen(vk, config)
 
