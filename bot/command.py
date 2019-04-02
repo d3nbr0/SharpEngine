@@ -17,8 +17,9 @@ def load_commands():
             cmd = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(cmd)
             if hasattr(cmd, 'cmd'):
-                cmd.error = bot.module.catch
-                commands.append(cmd)
+                if 'disabled' not in cmd.cmd or not cmd.cmd['disabled']:
+                    cmd.error = bot.module.catch
+                    commands.append(cmd)
             else:
                 console.error("Команда \"{}\\{}.py\" не была загружена".format(root, item))
 
