@@ -1,4 +1,5 @@
 import engine.other.console as console
+import engine.other.hooks as hooks
 import bot.bot as bot
 import sys
 from time import sleep
@@ -21,10 +22,11 @@ def listen(this_vk, this_config):
 
 def reload_bot():
     console.process("Перезагрузка бота...")
-    bot.handle = False
-    sleep(1)
+    hooks.handle = False
+    while hooks.is_busy:
+        sleep(0.1)
     bot.init(VK, config)
-    bot.handle = True
+    hooks.handle = True
     console.success("Бот успешно перезагружен!")
 
 

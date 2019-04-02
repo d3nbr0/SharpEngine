@@ -1,13 +1,13 @@
 from engine.vk.vk import VK
 from engine.other.config import Config
 from engine.other import console
-from engine.other import hooks
 import bot.bot as bot
+import engine.other.hooks as hooks
 import engine.cmds.cmd as cmd
 
 if __name__ == '__main__':
 
-    PLATFORM_VERSION = "1.0.5 BETA"
+    PLATFORM_VERSION = "1.0.6 BETA"
 
     config = None
     vk = None
