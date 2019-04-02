@@ -26,18 +26,17 @@ class New:
             'keyboard': json.dumps(self.__buttons, ensure_ascii=False).encode('utf8')
         }
 
-    def add_buttons_line(self, line):
-        if len(line) > 4:
-            line = line[:4]
+    def add_button(self, button):
+        if len(self.__buttons['buttons']) == 0 or len(self.__buttons['buttons'][-1]) + 1 > 4:
+            self.add_button_line()
+        self.__buttons['buttons'][-1].append(self.__button_object(button))
+
+    def add_buttons(self, buttons):
+        for item in buttons:
+            self.add_button(item)
+
+    def add_button_line(self):
         self.__buttons['buttons'].append([])
-        for item in line:
-            self.__buttons['buttons'][-1].append({
-                'action': {
-                    'type': 'text',
-                    'label': item
-                },
-                'color': 'default'
-            })
 
     def enable_nickname(self):
         self.__nickname = True
@@ -52,4 +51,14 @@ class New:
         self.__buttons = {
             'one_time': False,
             'buttons': []
+        }
+
+    @staticmethod
+    def __button_object(button):
+        return {
+            'action': {
+                'type': 'text',
+                'label': button if isinstance(button, str) else button['text']
+            },
+            'color': 'default' if isinstance(button, str) or 'color' not in button else button['color']
         }

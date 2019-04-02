@@ -43,4 +43,3 @@ def exec_command(message, rmsg):
             user.save()
             return True
     return False
-
