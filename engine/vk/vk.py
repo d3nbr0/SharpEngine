@@ -1,7 +1,6 @@
 from engine.vk.api.index import API
 from engine.vk.updates.longpoll import LongPoll
 from threading import Thread
-from time import sleep
 
 
 class VK:

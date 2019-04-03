@@ -1,5 +1,6 @@
 import json
 
+
 class New:
     def __init__(self):
         self.reset()

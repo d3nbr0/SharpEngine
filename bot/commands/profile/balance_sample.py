@@ -1,6 +1,3 @@
-import bot.module as module
-
-
 def on_command(data, user, msg):
     msg.enable_nickname()
     msg.add_line("ваш баланс: {}".format(user.get_money()))

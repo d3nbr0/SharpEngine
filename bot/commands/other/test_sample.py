@@ -1,4 +1,3 @@
-import bot.module as module
 import time
 
 # data =>

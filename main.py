@@ -7,7 +7,7 @@ import engine.cmds.cmd as cmd
 
 if __name__ == '__main__':
 
-    PLATFORM_VERSION = "1.0.6 BETA"
+    PLATFORM_VERSION = "1.0.7 BETA"
 
     config = None
     vk = None

@@ -1,6 +1,7 @@
 import types
 import bot.user_plugins as plugins
 
+
 def init():
     module.db.check_table("accounts", id="INTEGER AUTO_INCREMENT PRIMARY KEY", vkid="INTEGER NOT NULL", nickname="TEXT NOT NULL")
 

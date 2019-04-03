@@ -1,4 +1,3 @@
-import time
 import os
 import importlib
 import bot.user_plugins as plugins
