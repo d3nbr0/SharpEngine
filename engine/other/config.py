@@ -17,6 +17,7 @@ class Config:
         self.config.add_section("bot")
         self.config.set("bot", "access_token", "YOUR_TOKEN")
         self.config.set("bot", "group_id", "YOUR_ID")
+        self.config.set("bot", "workers_count", "COUNT")
         self.config.set("bot", "mysql_host", "HOST")
         self.config.set("bot", "mysql_user", "USER")
         self.config.set("bot", "mysql_pass", "PASSWORD")

@@ -1,16 +1,18 @@
 from engine.vk.vk import VK
 from engine.other.config import Config
 from engine.other import console
+from time import sleep
 import bot.bot as bot
-import engine.other.hooks as hooks
+import engine.other.worker as worker
 import engine.cmds.cmd as cmd
 
 if __name__ == '__main__':
 
-    PLATFORM_VERSION = "1.0.7 BETA"
+    PLATFORM_VERSION = "1.1.0 BETA"
 
     config = None
     vk = None
+    workers = []
 
 
     def start():
@@ -23,13 +25,28 @@ if __name__ == '__main__':
         console.log("Подключение к боту...")
         assert hasattr(bot, 'init')
         bot.init(vk, config)
+        init_workers(int(config.get_bot()['workers_count']))
         vk.listen_longpoll(handle_update)
         console.log("Платформа успешно загружена!")
         cmd.listen(vk, config)
 
 
+    def init_workers(count):
+        for item in range(count):
+            workers.append(worker.Worker())
+        console.debug("Workers loaded: {}".format(count))
+
+
     def handle_update(update):
-        hooks.do(update['type'], update['object'])
+        find_worker = True
+        while find_worker:
+            for i, item in enumerate(workers):
+                console.debug("Worker: {}".format(i))
+                if not item.is_busy:
+                    item.update = update
+                    find_worker = False
+                    break
+            sleep(0.001)
 
 
     start()
