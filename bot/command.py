@@ -28,7 +28,7 @@ def load_commands():
 
 
 def exec_command(message, rmsg):
-    args = message['text'].split(' ')
+    args = message['text'].lower().split(' ')
     for item in commands:
         if item.cmd['name'] == args[0]:
             user = bot.module.user.User(message['from_id'])
