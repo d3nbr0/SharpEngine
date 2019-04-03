@@ -1,6 +1,9 @@
 from colorama import Fore, Style
 
 
+DEBUG = False
+
+
 def log(text):
     print('[SharpEngine] {}'.format(text))
 
@@ -15,3 +18,8 @@ def success(text):
 
 def error(text):
     log(Fore.RED + text + Style.RESET_ALL)
+
+
+def debug(text):
+    if DEBUG:
+        process(text)
