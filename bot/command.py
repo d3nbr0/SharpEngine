@@ -31,7 +31,7 @@ def exec_command(message, rmsg):
     args = message['text'].split(' ')
     for item in commands:
         if item.cmd['name'] == args[0]:
-            user = bot.module.user.User(message['peer_id'])
+            user = bot.module.user.User(message['from_id'])
             try:
                 item.cmd['processing']({'msg': message, 'args': args, 'other': {'retime': time.time()}}, user, rmsg)
             except bot.module.CommandException as cmd:
