@@ -21,7 +21,11 @@ def message_new(msg):
         params = rmsg.vk_object()
         params.update({'peer_id': msg['peer_id'], 'random_id': random.randint(1000000, 9999999)})
         bot.module.VK.API.call('messages.send', params)
-        console.log('Сообщение: {} | От: {}'.format(msg['text'], msg['peer_id']))
+        console.log('Сообщение: {} | От: {}{}'.format(
+            msg['text'],
+            msg['from_id'],
+            ' | Чат: {}'.format(msg['peer_id'] - 2000000000) if msg['peer_id'] > 2000000000 else ''
+        ))
 
 
 hooks.add('message_new', message_new)
