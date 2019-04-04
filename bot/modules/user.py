@@ -16,7 +16,7 @@ class User(*plugins.get_plugins()):
                                    else module.registration.columns[key]
                 columns[0].append(key)
                 columns[1].append("'{}'".format(formatted_column))
-            module.db.auto_query("INSERT INTO accounts ({}) VALUES ({})".format(','.join(columns[0]), ','.join(columns[1])))
+            module.db.query("INSERT INTO accounts ({}) VALUES ({})".format(','.join(columns[0]), ','.join(columns[1])))
             user = self.load_user(vkid)
         for key in user.keys():
             setattr(self, key, user[key])
@@ -44,11 +44,10 @@ class User(*plugins.get_plugins()):
                 modified_columns.append("{} = {} + '{}'".format(key, key, self.modify[key]['value']))
         if len(modified_columns) == 0:
             return
-        module.db.auto_query("UPDATE accounts SET {} WHERE vkid = {}".format(','.join(modified_columns), self.vkid))
+        module.db.query("UPDATE accounts SET {} WHERE vkid = {}".format(','.join(modified_columns), self.vkid))
 
 
     @staticmethod
     def load_user(vkid):
-        result = module.db.query("SELECT * FROM accounts WHERE vkid = {}".format(vkid))
-        return result.fetchone() if result is not None else None
+        return module.db.query_one("SELECT * FROM accounts WHERE vkid = {}".format(vkid))
 
