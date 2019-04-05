@@ -6,12 +6,14 @@ from time import sleep
 
 VK = None
 config = None
+commands = {}
 
 
 def listen(this_vk, this_config):
-    global VK, config
+    global VK, config, commands
     VK = this_vk
     config = this_config
+    init()
     while True:
         text = input()
         if text in commands.keys():
@@ -20,22 +22,29 @@ def listen(this_vk, this_config):
             console.error("Команда \"{}\" не найдена.".format(text))
 
 
-def reload_bot():
-    console.process("Перезагрузка бота...")
-    hooks.handle = False
-    while hooks.is_busy:
-        sleep(0.1)
-    bot.init(VK, config)
-    hooks.handle = True
-    console.success("Бот успешно перезагружен!")
+def init():
+    def cmd_reload_bot():
+        console.process("Перезагрузка бота...")
+        hooks.handle = False
+        while hooks.is_busy:
+            sleep(0.1)
+        bot.init(VK, config)
+        hooks.handle = True
+        console.success("Бот успешно перезагружен!")
+
+    def cmd_close():
+        console.success("Завершение работы...")
+        sys.exit(0)
+
+    register_command('reload', cmd_reload_bot)
+    register_command(['close', 'exit', 'quit'], cmd_close)
 
 
-def close():
-    console.success("Завершение работы...")
-    sys.exit(0)
+def register_command(cmd_name, execute):
+    global commands
+    if isinstance(cmd_name, list):
+        for item in cmd_name:
+            commands[item] = execute
+    else:
+        commands[cmd_name] = execute
 
-
-commands = {
-    'close': close, 'exit': close, 'quit': close,
-    'reload': reload_bot
-}
