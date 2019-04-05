@@ -26,6 +26,7 @@ def query(line):
     with db.cursor() as cursor:
         cursor.execute(line)
         result = cursor.fetchall()
+        db.commit()
     return result
 
 
@@ -34,6 +35,7 @@ def query_one(line):
     with db.cursor() as cursor:
         cursor.execute(line)
         result = cursor.fetchone()
+        db.commit()
     return result
 
 
