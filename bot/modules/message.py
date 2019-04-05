@@ -24,7 +24,8 @@ class New:
         return {
             'message': '<br>'.join(self.__msg),
             'attachments': ','.join(self.__attachments),
-            'keyboard': json.dumps(self.__buttons, ensure_ascii=False).encode('utf8')
+            'keyboard': json.dumps(self.__buttons, ensure_ascii=False).encode('utf8'),
+            'sticker_id': self.__sticker
         }
 
     def add_button(self, button):
@@ -39,6 +40,9 @@ class New:
     def add_button_line(self):
         self.__buttons['buttons'].append([])
 
+    def sticker(self, id):
+        self.__sticker = id
+
     def enable_nickname(self):
         self.__nickname = True
 
@@ -48,6 +52,7 @@ class New:
     def reset(self):
         self.__msg = []
         self.__attachments = []
+        self.__sticker = 0
         self.__nickname = False
         self.__buttons = {
             'one_time': False,
