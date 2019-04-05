@@ -24,7 +24,7 @@ def load_commands():
                     cmd.error = bot.module.catch
                     commands.append(cmd)
             else:
-                console.error("Команда \"{}\\{}.py\" не была загружена".format(root, item))
+                console.error("Команда \"{}\\{}\" не была загружена".format(root, item))
 
 
 def exec_command(message, rmsg):
