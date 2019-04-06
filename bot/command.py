@@ -4,6 +4,7 @@ import os
 import time
 import sys
 import traceback
+import re
 import bot.module
 
 
@@ -30,7 +31,8 @@ def load_commands():
 
 
 def exec_command(message, rmsg):
-    args = message['text'].lower().split(' ')
+    message['text'] = re.sub(r'\[\w+\|@\w+\]\s', '', message['text'].lower())
+    args = re.split(r'\s+', message['text'])
     for item in commands:
         for cmd_name in item.cmd['name']:
             if cmd_name == args[0]:
