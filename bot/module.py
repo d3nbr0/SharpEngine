@@ -58,8 +58,9 @@ class Module:
         setattr(self, name, module)
 
 
-def catch(message):
-    raise CommandException(message)
+def catch(condition, message):
+    if not condition:
+        raise CommandException(message)
 
 
 class CommandException(Exception):
