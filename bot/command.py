@@ -31,7 +31,7 @@ def load_commands():
 
 
 def exec_command(message, rmsg):
-    message['text'] = re.sub(r'\[\w+\|@\w+\]\s', '', message['text'].lower())
+    message['text'] = re.sub(r'\[club\w+\|@\w+\]\s', '', message['text'].lower())
     args = re.split(r'\s+', message['text'])
     for item in commands:
         for cmd_name in item.cmd['name']:
@@ -40,6 +40,7 @@ def exec_command(message, rmsg):
                 try:
                     item.cmd['processing']({'msg': message, 'args': args, 'other': {'retime': time.time()}}, user, rmsg)
                 except bot.module.CommandException as cmd:
+                    rmsg.enable_nickname()
                     rmsg.add_line(cmd.message)
                 except Exception:
                     ex_type, ex, tb = sys.exc_info()

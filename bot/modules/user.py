@@ -1,4 +1,5 @@
 import types
+import re
 import bot.user_plugins as plugins
 
 
@@ -26,14 +27,12 @@ class User(*plugins.get_plugins()):
         if column not in self.modify:
             self.modify[column] = {'action': 'add', 'value': value}
         else:
-            if self.modify[column]['action'] == 'add':
-                self.modify[column]['value'] += value
+            self.modify[column]['value'] += value
+        setattr(self, column, getattr(self, column) + value)
 
     def set(self, column, value):
-        if column not in self.modify:
-            self.modify[column] = {'action': 'set', 'value': value}
-        else:
-            self.modify[column]['value'] = value
+        self.modify[column] = {'action': 'set', 'value': value}
+        setattr(self, column, value)
 
     def save(self):
         modified_columns = []
@@ -51,3 +50,10 @@ class User(*plugins.get_plugins()):
     def load_user(vkid):
         return module.db.query_one("SELECT * FROM accounts WHERE vkid = {}".format(vkid))
 
+    @staticmethod
+    def load_from_link(link):
+        match = re.findall(r'\[id(\w+)\|.+\]', link)
+        if len(match) != 0 and User.load_user(match[0]) is not None:
+            return User(match[0])
+        else:
+            return None

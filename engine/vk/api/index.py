@@ -9,6 +9,7 @@ class API:
 
     def __init__(self, params):
         self.options = params
+        self.session = requests.Session()
         assert 'access_token' in self.options, 'Access token has been not passed'
         assert 'group_id' in self.options, 'Group id has been not passed'
 
@@ -23,4 +24,4 @@ class API:
     def call_with_object(self, method, params={}):
         """Returns request object response"""
         params.update({'access_token': self.options['access_token'], 'group_id': self.options['group_id'], 'v': API_VERSION})
-        return requests.post("{}/{}".format(API_BASE_URL, method), params)
+        return self.session.post("{}/{}".format(API_BASE_URL, method), params)

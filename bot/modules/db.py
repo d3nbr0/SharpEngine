@@ -23,19 +23,22 @@ def init():
 
 def query(line):
     global db
-    with db.cursor() as cursor:
-        cursor.execute(line)
-        result = cursor.fetchall()
-        db.commit()
+    cursor = db.cursor()
+    cursor.execute(line)
+    result = cursor.fetchall()
+    db.commit()
+    cursor.close()
     return result
 
 
 def query_one(line):
     global db
-    with db.cursor() as cursor:
-        cursor.execute(line)
-        result = cursor.fetchone()
-        db.commit()
+    global db
+    cursor = db.cursor()
+    cursor.execute(line)
+    result = cursor.fetchone()
+    db.commit()
+    cursor.close()
     return result
 
 

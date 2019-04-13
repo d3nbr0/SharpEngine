@@ -7,6 +7,7 @@ WAIT_RECONNECT = 25
 class LongPoll:
     def __init__(self, API, update_method):
         self.API = API
+        self.session = requests.Session()
         self.data = {'ts': None, 'server': None, 'key': None}
         self.handle = update_method
         self.is_work = True
@@ -21,10 +22,10 @@ class LongPoll:
         while self.is_work:
             if self.data['ts'] is None:
                 self.get_server()
-            server_respond = requests.get('{}?act=a_check&key={}&ts={}&wait={}'.format(self.data['server'],
-                                                                                       self.data['key'],
-                                                                                       self.data['ts'],
-                                                                                       WAIT_RECONNECT)).json()
+            server_respond = self.session.get('{}?act=a_check&key={}&ts={}&wait={}'.format(self.data['server'],
+                                                                                            self.data['key'],
+                                                                                            self.data['ts'],
+                                                                                            WAIT_RECONNECT)).json()
             if 'failed' in server_respond:
                 self.handle_error(server_respond)
                 continue
