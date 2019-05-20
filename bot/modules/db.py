@@ -1,16 +1,30 @@
 from engine.other import console
+from contextlib import closing
 import MySQLdb
 import MySQLdb.cursors as cursors
+import threading
+from copy import deepcopy
 
 
-db = None
+connections = {}
 
 
 def init():
-    global db
+    global connections
+    connections = {}
     console.log("Подключение к MySQL серверу...")
     bot_config = module.config.get_bot()
-    db = MySQLdb.connect(
+    for i in range(1, int(bot_config['workers_count']) + 1):
+        connections['Thread-{}'.format(i)] = Connection(
+            host=bot_config['mysql_host'],
+            user=bot_config['mysql_user'],
+            passwd=bot_config['mysql_pass'],
+            db=bot_config['mysql_base'],
+            use_unicode=True,
+            charset="utf8",
+            cursorclass=cursors.DictCursor
+        )
+    connections['MainThread'] = Connection(
         host=bot_config['mysql_host'],
         user=bot_config['mysql_user'],
         passwd=bot_config['mysql_pass'],
@@ -22,23 +36,30 @@ def init():
 
 
 def query(line):
-    global db
-    cursor = db.cursor()
-    cursor.execute(line)
-    result = cursor.fetchall()
-    db.commit()
-    cursor.close()
+    global connections
+    conn = connections[threading.current_thread().name]
+    try:
+        conn.cursor.execute(line)
+        result = conn.cursor.fetchall()
+        conn.db.commit()
+    except Exception as ex:
+        init()
+        console.error("MySQL ошибка: {}".format(str(ex)))
+        result = query(line)
     return result
 
 
 def query_one(line):
-    global db
-    global db
-    cursor = db.cursor()
-    cursor.execute(line)
-    result = cursor.fetchone()
-    db.commit()
-    cursor.close()
+    global connections
+    conn = connections[threading.current_thread().name]
+    try:
+        conn.cursor.execute(line)
+        result = conn.cursor.fetchone()
+        conn.db.commit()
+    except Exception as ex:
+        init()
+        console.error("MySQL ошибка: {}".format(str(ex)))
+        result = query_one(line)
     return result
 
 
@@ -84,3 +105,10 @@ def create_column(table, name, args):
     query("ALTER TABLE {}\
                ADD COLUMN {} {}".format(table, name, args))
     console.success("Поле успешно добавлено!")
+
+
+class Connection:
+    def __init__(self, **args):
+        self.db = MySQLdb.connect(**args)
+        self.cursor = self.db.cursor()
+        self.cursor.execute('SET NAMES utf8mb4')
